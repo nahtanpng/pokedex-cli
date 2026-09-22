@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { readFileSync } from 'node:fs';
 import { parseArgs } from 'node:util';
 import { ApiError, NotFoundError, PokeApiClient } from './api/client.js';
 import type { Pokemon, PokemonSpecies, ResourceList } from './api/types.js';
@@ -56,6 +57,7 @@ Options
       --no-sprite        Skip the sprite
       --no-cache         Skip the local cache and always hit the API
       --no-color         Disable colored output
+  -v, --version          Show the version
   -h, --help             Show this help
 
 Examples
@@ -190,6 +192,12 @@ async function loadSprite(client: PokeApiClient, url: string | null): Promise<st
   }
 }
 
+function readVersion(): string {
+  // Resolves the same way from src/ (tsx) and dist/ (published build).
+  const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')) as { version: string };
+  return pkg.version;
+}
+
 async function main(argv: string[]): Promise<number> {
   let parsed;
   try {
@@ -205,6 +213,7 @@ async function main(argv: string[]): Promise<number> {
         'no-sprite': { type: 'boolean', default: false },
         'no-cache': { type: 'boolean', default: false },
         'no-color': { type: 'boolean', default: false },
+        version: { type: 'boolean', short: 'v', default: false },
         help: { type: 'boolean', short: 'h', default: false },
       },
     });
@@ -214,6 +223,11 @@ async function main(argv: string[]): Promise<number> {
   }
 
   const { values, positionals } = parsed;
+
+  if (values.version) {
+    console.log(readVersion());
+    return 0;
+  }
 
   if (values.help || positionals.length === 0) {
     console.log(USAGE.trimStart());

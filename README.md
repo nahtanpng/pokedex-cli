@@ -1,5 +1,9 @@
 # pokedex-cli
 
+[![CI](https://github.com/nahtanpng/pokedex-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/nahtanpng/pokedex-cli/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/@nahtanpng/pokedex-cli)](https://www.npmjs.com/package/@nahtanpng/pokedex-cli)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 > Look up a Pokémon right from your terminal, without pausing your run to open Google.
 
 ![pokedex pikachu --game platinum, with the sprite beside the info](docs/screenshot.png)
@@ -96,6 +100,7 @@ pokedex gengar --game crystal --shiny
       --json             print the data as JSON
       --no-cache         skip the local cache
       --no-color         disable colors
+  -v, --version          show the version
   -h, --help             show help
 ```
 
