@@ -180,8 +180,8 @@ async function buildView(client: PokeApiClient, input: string, options: ViewOpti
 
 async function loadSprite(client: PokeApiClient, url: string | null): Promise<string[]> {
   if (!url) return [];
-  // Leave room for the text sections on short terminals.
-  const maxRows = Math.max(8, Math.min(SPRITE_MAX_ROWS, (process.stdout.rows ?? 40) - 16));
+  // The text sits beside the sprite, so it only has to fit the terminal height.
+  const maxRows = Math.max(8, Math.min(SPRITE_MAX_ROWS, (process.stdout.rows ?? 40) - 2));
   try {
     return renderSprite(await client.getBinary(url), maxRows);
   } catch {
@@ -238,7 +238,7 @@ async function main(argv: string[]): Promise<number> {
     const wantsSprite = values.sprite ?? (colors && !values['no-sprite']);
     const sprite = wantsSprite ? await loadSprite(client, view.spriteUrl) : [];
 
-    console.log(render(view, palette(colors), sprite));
+    console.log(render(view, palette(colors), sprite, process.stdout.columns ?? 80));
     return 0;
   } catch (error) {
     if (error instanceof UserError) {

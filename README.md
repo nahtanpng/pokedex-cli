@@ -2,6 +2,8 @@
 
 > Look up a Pokémon right from your terminal, without pausing your run to open Google.
 
+![pokedex pikachu --game platinum, with the sprite beside the info](docs/screenshot.png)
+
 You're in the middle of a run, your rival sends out a Gengar and the question hits: *what's
 super effective against it in this game?* Or: *where do I catch a Pikachu in Pokémon Red?*
 *What level does Gastly evolve at?*
@@ -29,7 +31,8 @@ Where to find it
 ```
 
 And as a bonus, you get the sprite from that very game, drawn in colorful pixel art right in
-your terminal.
+your terminal, with the info laid out beside it neofetch-style (on narrow terminals it moves
+above the text).
 
 ## Why the game matters
 

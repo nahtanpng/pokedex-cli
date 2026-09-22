@@ -4,6 +4,12 @@ import type { EvolutionNode } from '../domain/evolution.js';
 import { pokemonName, titleCase } from '../util.js';
 import { type Palette } from './colors.js';
 
+const ANSI = /\u001b\[[0-9;]*m/g;
+const RESET = '\u001b[0m';
+const SPRITE_GAP = '   ';
+// Narrower than this the text column wraps so much that stacking reads better.
+const MIN_INFO_WIDTH = 40;
+
 const ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
 
 export interface PokedexView {
@@ -93,14 +99,11 @@ function renderLocations(view: PokedexView, c: Palette): string[] {
   });
 }
 
-export function render(view: PokedexView, c: Palette, sprite: string[] = []): string {
+function renderInfo(view: PokedexView, c: Palette): string[] {
   const lines: string[] = [];
-
-  for (const line of sprite) lines.push(`  ${line}`);
 
   const number = c.dim(`#${String(view.id).padStart(4, '0')}`);
   const types = view.types.map((type) => c.type(type)).join(c.dim(' / '));
-  lines.push('');
   lines.push(`${c.bold(view.name)} ${number}  ${types}`);
   lines.push(c.dim(`${view.game.label} · ${generationLabel(view.game.generation)}`));
 
@@ -133,6 +136,95 @@ export function render(view: PokedexView, c: Palette, sprite: string[] = []): st
   }
 
   for (const note of view.notes) lines.push(c.dim(`  ${note}`));
+
+  return lines;
+}
+
+export function visibleWidth(text: string): number {
+  return text.replace(ANSI, '').length;
+}
+
+/**
+ * Breaks a line into pieces at most `width` columns wide, splitting on spaces. Each piece
+ * ends with a reset and the next one replays the escape codes still in effect, so colors
+ * survive the break without bleeding into the sprite column.
+ */
+export function wrap(line: string, width: number): string[] {
+  if (visibleWidth(line) <= width) return [line];
+
+  const lead = /^ */.exec(line)![0];
+  const reset = line.includes('\u001b') ? RESET : '';
+  const indent = ' '.repeat(lead.length + 2);
+  const lines: string[] = [];
+  const active: string[] = [];
+  let current = lead;
+  let currentWidth = lead.length;
+  let hasContent = false;
+  let pending = '';
+
+  const breakLine = () => {
+    lines.push(`${current}${reset}`);
+    current = indent + active.join('');
+    currentWidth = indent.length;
+    hasContent = false;
+    pending = '';
+  };
+
+  for (const part of line.slice(lead.length).split(/(\u001b\[[0-9;]*m| +)/)) {
+    if (part === '') continue;
+
+    if (part.startsWith('\u001b')) {
+      current += part;
+      if (part === RESET) active.length = 0;
+      else active.push(part);
+      continue;
+    }
+
+    if (part.startsWith(' ')) {
+      pending += part;
+      continue;
+    }
+
+    let word = part;
+    while (word.length > 0) {
+      const available = width - currentWidth - pending.length;
+      if (word.length <= available) {
+        current += pending + word;
+        currentWidth += pending.length + word.length;
+        hasContent = true;
+        pending = '';
+        word = '';
+      } else if (hasContent) {
+        breakLine();
+      } else {
+        current += pending + word.slice(0, available);
+        word = word.slice(available);
+        breakLine();
+      }
+    }
+  }
+
+  lines.push(current);
+  return lines;
+}
+
+export function render(view: PokedexView, c: Palette, sprite: string[] = [], columns = 80): string {
+  const info = renderInfo(view, c);
+  if (sprite.length === 0) return ['', ...info, ''].join('\n');
+
+  const spriteWidth = visibleWidth(sprite[0]!);
+  const infoWidth = columns - 2 - spriteWidth - SPRITE_GAP.length;
+  if (infoWidth < MIN_INFO_WIDTH) {
+    return [...sprite.map((line) => `  ${line}`), '', ...info, ''].join('\n');
+  }
+
+  const wrapped = info.flatMap((line) => wrap(line, infoWidth));
+  const blank = ' '.repeat(spriteWidth);
+  const lines: string[] = [];
+
+  for (let row = 0; row < Math.max(sprite.length, wrapped.length); row++) {
+    lines.push(`  ${sprite[row] ?? blank}${SPRITE_GAP}${wrapped[row] ?? ''}`.trimEnd());
+  }
 
   lines.push('');
   return lines.join('\n');
