@@ -1,6 +1,6 @@
 {
   "name": "@nahtanpng/pokedex-cli",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Terminal Pokédex for quick mid-run lookups: weaknesses, evolution, where to find it and the sprite, all for the game you're actually playing.",
   "keywords": [
     "pokemon",
