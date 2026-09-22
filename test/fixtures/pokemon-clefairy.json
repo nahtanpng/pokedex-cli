@@ -1,0 +1,1 @@
+{"id": 35, "name": "clefairy", "types": [{"slot": 1, "type": {"name": "fairy", "url": "https://pokeapi.co/api/v2/type/18/"}}], "past_types": [{"generation": {"name": "generation-v", "url": "https://pokeapi.co/api/v2/generation/5/"}, "types": [{"slot": 1, "type": {"name": "normal", "url": "https://pokeapi.co/api/v2/type/1/"}}]}]}

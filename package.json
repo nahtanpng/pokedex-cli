@@ -1,0 +1,26 @@
+{
+  "name": "pokedex-cli",
+  "version": "1.0.0",
+  "description": "Pokédex CLI: weaknesses, evolution and wild locations for a Pokémon in a specific game",
+  "type": "module",
+  "bin": {
+    "pokedex": "dist/cli.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/cli.ts",
+    "test": "node --import tsx --test test/*.test.ts",
+    "prepare": "npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}
