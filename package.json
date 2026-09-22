@@ -37,7 +37,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && chmod +x dist/cli.js",
     "dev": "tsx src/cli.ts",
     "test": "node --import tsx --test test/*.test.ts",
     "prepack": "npm run build",
