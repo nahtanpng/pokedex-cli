@@ -1,12 +1,12 @@
 # pokedex-cli
 
-> Tira a dúvida sobre um Pokémon direto do terminal, sem pausar a run pra abrir o Google.
+> Look up a Pokémon right from your terminal, without pausing your run to open Google.
 
-Você está no meio de uma run, o Gengar do rival aparece e bate a dúvida: *o que é
-super efetivo nele nesse jogo?* Ou então: *onde eu pego um Pikachu em Pokemon Red?* *Com que nível o
-Gastly evolui?*
+You're in the middle of a run, your rival sends out a Gengar and the question hits: *what's
+super effective against it in this game?* Or: *where do I catch a Pikachu in Pokémon Red?*
+*What level does Gastly evolve at?*
 
-É só um comando, e a resposta já vem **pro jogo que você está jogando**:
+One command, and the answer comes **for the game you're actually playing**:
 
 ```console
 $ pokedex pikachu --game red
@@ -28,71 +28,72 @@ Where to find it
   Viridian Forest  — walk Lv 3-5 5%
 ```
 
-E de brinde vem o sprite do próprio jogo, em pixel art colorida, direto no terminal.
+And as a bonus, you get the sprite from that very game, drawn in colorful pixel art right in
+your terminal.
 
-## Por que o jogo importa
+## Why the game matters
 
-A maioria dos sites mostra os dados da geração mais recente. Se você está jogando Red, isso
-pode te fazer perder a luta. Com `--game`, a CLI responde de acordo com o jogo:
+Most sites show data from the latest generation. If you're playing Red, that can cost you the
+fight. With `--game`, the CLI answers for that specific game:
 
-| O quê | O que muda |
+| What | What changes |
 | --- | --- |
-| **Fraquezas** | Usa a tabela de tipos da época: na Gen 1 não existe Dark nem Steel, e Fairy só chega na Gen 6. O tipo do Pokémon também é o da época (Clefairy era Normal). |
-| **Evolução** | Some com as evoluções que ainda não existiam (nada de Espeon em Red) e começa a árvore na forma base quando o bebê não existia (sem Pichu em Red). |
-| **Onde encontrar** | Só os encontros daquela versão, com método, nível e chance. Não dá pra capturar na natureza? Ele te fala de qual Pokémon evoluir. |
-| **Sprite** | O sprite do jogo mesmo: `--game red` mostra o de Red/Blue, `--game crystal` o de Crystal. |
+| **Weaknesses** | Uses the type chart of that era: Gen 1 has no Dark or Steel, and Fairy only shows up in Gen 6. The Pokémon's typing is the one it had back then too (Clefairy was Normal). |
+| **Evolution** | Hides evolutions that didn't exist yet (no Espeon in Red) and starts the tree at the base form when the baby didn't exist (no Pichu in Red). |
+| **Where to find it** | Only encounters from that version, with method, level and rate. Can't be caught in the wild? It tells you which Pokémon to evolve from. |
+| **Sprite** | The actual sprite from the game: `--game red` shows the Red/Blue one, `--game crystal` the Crystal one. |
 
-## Instalação
+## Installation
 
-Precisa do Node 20+.
+Requires Node 20+.
 
 ```bash
 git clone https://github.com/nahtanpng/pokedex-cli.git
 cd pokedex-cli
-npm install      # já roda o build
-npm link         # deixa o comando `pokedex` disponível no terminal
+npm install      # also runs the build
+npm link         # makes the `pokedex` command available in your terminal
 ```
 
-## Uso
+## Usage
 
 ```bash
-pokedex <pokemon> --game <jogo>
+pokedex <pokemon> --game <game>
 ```
 
-Algumas dúvidas clássicas de run:
+Some classic mid-run questions:
 
 ```bash
-pokedex gengar --game red          # o que usar contra o Gengar na Gen 1
-pokedex haunter --game emerald     # quando evolui (spoiler: precisa de troca)
-pokedex eevee --game gold          # qual pedra ou condição dá cada evolução
-pokedex pikachu --game yellow      # onde capturar
-pokedex vulpix-alola -g sword      # formas regionais
-pokedex mr mime                    # nome com espaço funciona sem aspas
+pokedex gengar --game red          # what to use against Gengar in Gen 1
+pokedex haunter --game emerald     # when it evolves (spoiler: needs a trade)
+pokedex eevee --game gold          # which stone or condition gives each evolution
+pokedex pikachu --game yellow      # where to catch it
+pokedex vulpix-alola -g sword      # regional forms
+pokedex mr mime                    # names with spaces work without quotes
 pokedex gengar --game crystal --shiny
 ```
 
-O `<pokemon>` é o nome em inglês, do jeito que a PokeAPI usa (`mr-mime`, `vulpix-alola`,
-`raichu-alola`). Errou a grafia? Relaxa, a CLI sugere o nome certo.
+`<pokemon>` is the English name, the way PokeAPI spells it (`mr-mime`, `vulpix-alola`,
+`raichu-alola`). Typo? No worries, the CLI suggests the right name.
 
-O `--game` aceita o nome da versão: `red`, `blue`, `yellow`, `gold`, `silver`, `crystal`,
+`--game` takes the version name: `red`, `blue`, `yellow`, `gold`, `silver`, `crystal`,
 `ruby`, `emerald`, `firered`, `diamond`, `platinum`, `heartgold`, `black`, `x`, `sun`,
-`sword`, `scarlet` etc. Sem `--game`, vale a geração mais recente.
+`sword`, `scarlet` and so on. Without `--game`, the latest generation is used.
 
-### Opções
+### Options
 
 ```
-  -g, --game <versão>    jogo usado na consulta
-      --shiny            mostra o sprite shiny
-      --all-locations    lista todos os locais (padrão: os 10 primeiros)
-      --no-sprite        não mostra o sprite
-      --sprite           força o sprite mesmo com a saída redirecionada
-      --json             imprime os dados em JSON
-      --no-cache         ignora o cache local
-      --no-color         desliga as cores
-  -h, --help             ajuda
+  -g, --game <version>   game to look up
+      --shiny            show the shiny sprite
+      --all-locations    list every location (default: the first 10)
+      --no-sprite        skip the sprite
+      --sprite           force the sprite even when the output is piped
+      --json             print the data as JSON
+      --no-cache         skip the local cache
+      --no-color         disable colors
+  -h, --help             show help
 ```
 
-Curte brincar no terminal? O `--json` combina bem com outras ferramentas:
+Like tinkering in the terminal? `--json` plays nicely with other tools:
 
 ```bash
 pokedex charizard --game yellow --json | jq .weaknesses
@@ -100,46 +101,53 @@ pokedex charizard --game yellow --json | jq .weaknesses
 
 ## Cache
 
-A primeira consulta de um Pokémon pode demorar alguns segundos: a CLI faz dezenas de
-requisições à PokeAPI (uma para cada área de encontro). Depois disso tudo fica em cache por 7
-dias em `~/.cache/pokedex-cli` (ou em `$XDG_CACHE_HOME`), sprites inclusive, e a próxima
-consulta sai umas 10x mais rápida.
+The first lookup of a Pokémon can take a few seconds: the CLI makes dozens of requests to
+PokeAPI (one per encounter area). After that, everything is cached for 7 days in
+`~/.cache/pokedex-cli` (or `$XDG_CACHE_HOME`), sprites included, and the next lookup is about
+10x faster.
 
-## Limitações
+## Limitations
 
-- Os dados vêm da [PokeAPI](https://pokeapi.co), então nomes de Pokémon e locais aparecem em
-  inglês.
-- A PokeAPI registra principalmente encontros selvagens. Presentes, trocas e eventos só
-  aparecem quando a API tem esses dados.
-- Sword/Shield e alguns jogos recentes não têm sprite próprio na API; nesses casos aparece o
-  sprite padrão.
+- Data comes from [PokeAPI](https://pokeapi.co), so Pokémon and location names are in English.
+- PokeAPI mostly records wild encounters. Gifts, trades and events only show up when the API
+  has them.
+- Sword/Shield and some recent games don't have their own sprite in the API; in those cases the
+  default sprite is shown.
 
-## Desenvolvimento
+## Development
 
 ```bash
-npm run dev -- gengar --game red   # roda direto do TypeScript, sem build
+npm run dev -- gengar --game red   # runs straight from TypeScript, no build
 npm run build
 npm test
 ```
 
-Os testes usam fixtures reais da API em `test/fixtures/` e cobrem a lógica pura: multiplicadores
-de Gengar na Gen 1 e na Gen 9, tipos históricos de Clefairy, as frases de condição de evolução,
-o filtro da cadeia do Eevee por jogo e a escolha de sprite.
+Tests use real API fixtures in `test/fixtures/` and cover the pure logic: Gengar's multipliers
+in Gen 1 vs Gen 9, Clefairy's historical typing, evolution condition phrasing, filtering
+Eevee's chain by game and sprite selection.
 
-| Arquivo | Responsabilidade |
+| File | Responsibility |
 | --- | --- |
-| `src/cli.ts` | argumentos, orquestração, exit codes |
-| `src/api/client.ts` | `fetch` com cache em disco, retry e requisições concorrentes |
-| `src/domain/game.ts` | versão → version-group → geração |
-| `src/domain/effectiveness.ts` | tipos e tabela de dano históricos, multiplicadores defensivos |
-| `src/domain/evolution.ts` | árvore de evolução filtrada pelo jogo e frase da condição |
-| `src/domain/encounters.ts` | encontros da versão agrupados por local |
-| `src/domain/sprite.ts` | escolha do sprite pelo version-group do jogo |
-| `src/render/png.ts` | decodificador PNG mínimo, sem dependências (`node:zlib`) |
-| `src/render/sprite.ts` | crop, resize e conversão para half-blocks ANSI |
-| `src/render/output.ts` | saída colorida do terminal |
+| `src/cli.ts` | arguments, orchestration, exit codes |
+| `src/api/client.ts` | `fetch` with disk cache, retry and concurrent requests |
+| `src/domain/game.ts` | version → version group → generation |
+| `src/domain/effectiveness.ts` | historical types and damage chart, defensive multipliers |
+| `src/domain/evolution.ts` | evolution tree filtered by game and condition phrasing |
+| `src/domain/encounters.ts` | version encounters grouped by location |
+| `src/domain/sprite.ts` | sprite selection by the game's version group |
+| `src/render/png.ts` | minimal dependency-free PNG decoder (`node:zlib`) |
+| `src/render/sprite.ts` | crop, resize and conversion to ANSI half-blocks |
+| `src/render/output.ts` | colored terminal output |
 
-O sprite é desenhado com `▀`/`▄` em truecolor, com fallback para 256 cores quando o terminal
-não anuncia `COLORTERM`.
+The sprite is drawn with `▀`/`▄` in truecolor, falling back to 256 colors when the terminal
+doesn't advertise `COLORTERM`.
 
-Exit codes: `0` ok · `1` Pokémon não encontrado · `2` uso inválido · `3` erro de rede/API.
+Exit codes: `0` ok · `1` Pokémon not found · `2` invalid usage · `3` network/API error.
+
+## License
+
+[MIT](LICENSE)
+
+Pokémon and all related names are trademarks of Nintendo, Creatures Inc. and GAME FREAK inc.
+This is an unofficial fan project, not affiliated with them. Data and sprites come from
+[PokeAPI](https://pokeapi.co).
