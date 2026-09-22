@@ -1,7 +1,27 @@
 {
-  "name": "pokedex-cli",
+  "name": "@nahtanpng/pokedex-cli",
   "version": "1.0.0",
-  "description": "Pokédex CLI: weaknesses, evolution and wild locations for a Pokémon in a specific game",
+  "description": "Terminal Pokédex for quick mid-run lookups: weaknesses, evolution, where to find it and the sprite, all for the game you're actually playing.",
+  "keywords": [
+    "pokemon",
+    "pokedex",
+    "pokeapi",
+    "cli",
+    "terminal",
+    "gaming",
+    "pokemon-games",
+    "ansi-art"
+  ],
+  "author": "Nathan Ferreira",
+  "license": "MIT",
+  "homepage": "https://github.com/nahtanpng/pokedex-cli#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nahtanpng/pokedex-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nahtanpng/pokedex-cli/issues"
+  },
   "type": "module",
   "bin": {
     "pokedex": "dist/cli.js"
@@ -10,18 +30,22 @@
     "node": ">=20"
   },
   "files": [
-    "dist"
+    "dist",
+    "!dist/**/*.map"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsx src/cli.ts",
     "test": "node --import tsx --test test/*.test.ts",
-    "prepare": "npm run build"
+    "prepack": "npm run build",
+    "prepublishOnly": "npm test"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"
-  },
-  "license": "MIT"
+  }
 }

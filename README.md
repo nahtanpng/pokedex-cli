@@ -48,10 +48,13 @@ fight. With `--game`, the CLI answers for that specific game:
 Requires Node 20+.
 
 ```bash
-git clone https://github.com/nahtanpng/pokedex-cli.git
-cd pokedex-cli
-npm install      # also runs the build
-npm link         # makes the `pokedex` command available in your terminal
+npm install -g @nahtanpng/pokedex-cli
+```
+
+That's it, the `pokedex` command is ready. Just want to try it first? Run it without installing:
+
+```bash
+npx @nahtanpng/pokedex-cli gengar --game red
 ```
 
 ## Usage
@@ -117,8 +120,13 @@ PokeAPI (one per encounter area). After that, everything is cached for 7 days in
 ## Development
 
 ```bash
-npm run dev -- gengar --game red   # runs straight from TypeScript, no build
+git clone https://github.com/nahtanpng/pokedex-cli.git
+cd pokedex-cli
+npm install
 npm run build
+npm link                           # points the `pokedex` command at your local copy
+
+npm run dev -- gengar --game red   # runs straight from TypeScript, no build
 npm test
 ```
 
